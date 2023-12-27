@@ -11,7 +11,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<InventoryMGMTDbContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("InventoryMGMTSystemConnectionString")));
+options.UseSqlServer(builder.Configuration.GetConnectionString("InventoryMGMTConnectionString")));
+
+
 
 var app = builder.Build();
 
