@@ -6,5 +6,10 @@ namespace InventoryMGMT_SYSTEM.NET.Services.UserServices
     public interface IUserService
     {
         User RegisterUser(RegisterUserDTO registerUserDTO);
+        int UnregisterUser(int userId);
     }
+
+
+
+
 }

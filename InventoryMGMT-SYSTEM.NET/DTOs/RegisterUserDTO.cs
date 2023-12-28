@@ -12,4 +12,11 @@
 
         public string? UserType { get; set; }
     }
+
+    public class UnregisterUserDTO
+    {
+        public int UserId { get; set; }
+    }
+
+
 }

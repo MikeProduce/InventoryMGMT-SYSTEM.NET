@@ -2,6 +2,7 @@
 using InventoryMGMT_SYSTEM.NET.DTOs;
 using InventoryMGMT_SYSTEM.NET.Repository.UserRepository;
 
+
 namespace InventoryMGMT_SYSTEM.NET.Services.UserServices
 {
     public class UserService : IUserService
@@ -26,5 +27,13 @@ namespace InventoryMGMT_SYSTEM.NET.Services.UserServices
 
             return _userRepository.CreateUser(newUser);
         }
+
+        public int UnregisterUser(int userId)
+        {
+            _userRepository.DeleteUser(userId);
+            return userId;
+        }
+
+
     }
 }

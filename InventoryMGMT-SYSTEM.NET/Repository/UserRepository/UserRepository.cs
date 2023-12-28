@@ -1,5 +1,6 @@
 ﻿using InventoryMGMT_SYSTEM.NET.Data;
 using InventoryMGMT_SYSTEM.NET.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 
 namespace InventoryMGMT_SYSTEM.NET.Repository.UserRepository
@@ -18,6 +19,18 @@ namespace InventoryMGMT_SYSTEM.NET.Repository.UserRepository
             _dbContext.SaveChanges();
             return user;
         }
+        
+        public int DeleteUser(int userId)
+        {
+            var user = _dbContext.Users.Where(u => u.UserId == userId).FirstOrDefault();
+
+            _dbContext.Users.Remove(user);
+            _dbContext.SaveChanges();
+
+            return userId;
+        }
+
+
     }
 
 }

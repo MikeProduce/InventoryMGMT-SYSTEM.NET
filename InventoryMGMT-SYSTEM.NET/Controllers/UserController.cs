@@ -29,5 +29,22 @@ namespace InventoryMGMT_SYSTEM.NET.Controllers.UserController
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Error: {ex.Message}");
             }
         }
+
+        // Delete 
+        [HttpDelete("unregister")]
+        public IActionResult Unregister([FromBody] UnregisterUserDTO unregisterUserDTO)
+        {
+            try
+            {
+                var deleteUser = _userService.UnregisterUser(unregisterUserDTO.UserId);
+                return Ok(deleteUser);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error:  {ex.Message}");
+            }
+        }
+
+
     }
 }
