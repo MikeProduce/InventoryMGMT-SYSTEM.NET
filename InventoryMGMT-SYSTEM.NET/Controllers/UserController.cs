@@ -1,81 +1,33 @@
-﻿using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using InventoryMGMT_SYSTEM.NET.Data;
-using InventoryMGMT_SYSTEM.NET.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using InventoryMGMT_SYSTEM.NET.DTOs;
+using InventoryMGMT_SYSTEM.NET.Services.UserServices;
 
-[Route("api/[controller]")]
-[ApiController]
-public class UserController : ControllerBase
+
+namespace InventoryMGMT_SYSTEM.NET.Controllers.UserController
 {
-    private readonly InventoryMGMTDbContext _context;
-
-    public UserController(InventoryMGMTDbContext context)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class UserController : ControllerBase
     {
-        _context = context;
-    }
+        private readonly IUserService _userService;
 
-    // GET: api/User
-    [HttpGet]
-    public IActionResult GetUsers()
-    {
-        var users = _context.Users.ToList();
-        return Ok(users);
-    }
-
-    // GET: api/User/5
-    [HttpGet("{id}")]
-    public IActionResult GetUser(int id)
-    {
-        var user = _context.Users.Find(id);
-
-        if (user == null)
+        public UserController(IUserService userService)
         {
-            return NotFound();
+            _userService = userService;
         }
 
-        return Ok(user);
-    }
-
-    // POST: api/User
-    [HttpPost]
-    public IActionResult PostUser(User user)
-    {
-        _context.Users.Add(user);
-        _context.SaveChanges();
-
-        return CreatedAtAction(nameof(GetUser), new { id = user.UserId }, user);
-    }
-
-    // PUT: api/User/5
-    [HttpPut("{id}")]
-    public IActionResult PutUser(int id, User user)
-    {
-        if (id != user.UserId)
+        [HttpPost("register")]
+        public IActionResult Register([FromBody] RegisterUserDTO registerUserDTO)
         {
-            return BadRequest();
+            try
+            {
+                var newUser = _userService.RegisterUser(registerUserDTO);
+                return Ok(newUser); // You may customize the response based on your requirements
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error: {ex.Message}");
+            }
         }
-
-        _context.Entry(user).State = EntityState.Modified;
-        _context.SaveChanges();
-
-        return NoContent();
-    }
-
-    // DELETE: api/User/5
-    [HttpDelete("{id}")]
-    public IActionResult DeleteUser(int id)
-    {
-        var user = _context.Users.Find(id);
-
-        if (user == null)
-        {
-            return NotFound();
-        }
-
-        _context.Users.Remove(user);
-        _context.SaveChanges();
-
-        return NoContent();
     }
 }
