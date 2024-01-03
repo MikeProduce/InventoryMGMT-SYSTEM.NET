@@ -1,4 +1,5 @@
 ﻿using InventoryMGMT_SYSTEM.NET.Data;
+using InventoryMGMT_SYSTEM.NET.DTOs;
 using InventoryMGMT_SYSTEM.NET.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 
@@ -11,6 +12,16 @@ namespace InventoryMGMT_SYSTEM.NET.Repository.UserRepository
         public UserRepository(InventoryMGMTDbContext dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        public bool EmailExists(string email)
+        {
+            return _dbContext.Users.Any(user => user.Email == email);
+        }
+
+        public bool UsernameExists(string username)
+        {
+            return _dbContext.Users.Any(user => user.Username == username);
         }
 
         public User CreateUser(User user)
