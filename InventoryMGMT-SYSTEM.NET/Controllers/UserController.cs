@@ -17,12 +17,12 @@ namespace InventoryMGMT_SYSTEM.NET.Controllers.UserController
         }
 
         [HttpPost("register")]
-        public IActionResult Register([FromBody] RegisterUserDTO registerUserDTO)
+        public async Task<IActionResult> Register([FromBody] RegisterUserDTO registerUserDTO)
         {
             try
             {
-                var newUser = _userService.RegisterUser(registerUserDTO);
-                return Ok(newUser); // You may customize the response based on your requirements
+                var newUser =  await _userService.RegisterUser(registerUserDTO);
+                return CreatedAtAction(nameof(Register), new { id = newUser.UserId }, newUser);
             }
             catch (Exception ex)
             {

@@ -4,10 +4,10 @@ namespace InventoryMGMT_SYSTEM.NET.Repository.UserRepository
 {
     public interface IUserRepository
     {
-        User CreateUser(User user);
+        Task<User> CreateUser(User user);
         int DeleteUser(int userId);
-        bool EmailExists(string email);
-        bool UsernameExists(string username);
+        Task<bool> EmailExists(string email);
+        Task<bool> UsernameExists(string username);
     }
 
 }

@@ -2,7 +2,7 @@
 using InventoryMGMT_SYSTEM.NET.DTOs;
 using InventoryMGMT_SYSTEM.NET.Repository.UserRepository;
 using InventoryMGMT_SYSTEM.NET.Enum.RegistrationEnum;
-
+using BCrypt.Net;
 
 namespace InventoryMGMT_SYSTEM.NET.Services.UserServices
 {
@@ -15,27 +15,31 @@ namespace InventoryMGMT_SYSTEM.NET.Services.UserServices
             _userRepository = userRepository;
         }
 
-        public User RegisterUser(RegisterUserDTO registerUserDTO)
+        public async Task<User> RegisterUser(RegisterUserDTO registerUserDTO)
         {
-            if (_userRepository.UsernameExists(registerUserDTO.UserName))
+            if (await _userRepository.UsernameExists(registerUserDTO.UserName))
             {
                 // Throw an exception indicating that the username is already taken
                 throw new InvalidOperationException($"Username '{registerUserDTO.UserName}' is already taken. Please choose a different one."); 
             }
-            if (_userRepository.EmailExists(registerUserDTO.Email)) 
+            if (await _userRepository.EmailExists(registerUserDTO.Email)) 
             {
                 throw new InvalidOperationException("This Email is already being used. Please choose a different one.");
             }
+
+            // Hash and salt the password using BCrypt
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(registerUserDTO.Password, BCrypt.Net.BCrypt.GenerateSalt(12));
 
             var newUser = new User
             {
                 Username = registerUserDTO.UserName,
                 Email = registerUserDTO.Email,
-                Password = registerUserDTO.Password,
+                Password = hashedPassword,
                 UserType = "User",
             };
 
-            return _userRepository.CreateUser(newUser);
+            return await _userRepository.CreateUser(newUser);
+
         }
 
 

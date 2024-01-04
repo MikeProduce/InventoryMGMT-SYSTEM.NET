@@ -14,20 +14,20 @@ namespace InventoryMGMT_SYSTEM.NET.Repository.UserRepository
             _dbContext = dbContext;
         }
 
-        public bool EmailExists(string email)
+        public Task<bool> EmailExists(string email)
         {
-            return _dbContext.Users.Any(user => user.Email == email);
+            return Task.FromResult(_dbContext.Users.Any(user => user.Email == email));
         }
 
-        public bool UsernameExists(string username)
+        public  Task<bool> UsernameExists(string username)
         {
-            return _dbContext.Users.Any(user => user.Username == username);
+            return Task.FromResult(_dbContext.Users.Any(user => user.Username == username));
         }
 
-        public User CreateUser(User user)
+        public async Task<User> CreateUser(User user)
         {
             _dbContext.Users.Add(user);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
             return user;
         }
         
