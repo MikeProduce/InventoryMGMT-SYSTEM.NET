@@ -4,6 +4,7 @@ using InventoryMGMT_SYSTEM.NET.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryMGMT_SYSTEM.NET.Migrations
 {
     [DbContext(typeof(InventoryMGMTDbContext))]
-    partial class InventoryMGMTDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240105024409_UpdateUserPasswordLength")]
+    partial class UpdateUserPasswordLength
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

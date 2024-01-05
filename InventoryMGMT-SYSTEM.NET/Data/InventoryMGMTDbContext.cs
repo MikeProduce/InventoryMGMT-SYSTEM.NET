@@ -186,7 +186,7 @@ public partial class InventoryMGMTDbContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.Password)
-                .HasMaxLength(50)
+                .HasMaxLength(100)
                 .IsUnicode(false);
             entity.Property(e => e.UserType)
                 .HasMaxLength(15)

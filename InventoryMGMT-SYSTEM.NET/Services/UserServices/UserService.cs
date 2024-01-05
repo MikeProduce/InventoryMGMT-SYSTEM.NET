@@ -1,8 +1,6 @@
 ﻿using InventoryMGMT_SYSTEM.NET.Models;
 using InventoryMGMT_SYSTEM.NET.DTOs;
 using InventoryMGMT_SYSTEM.NET.Repository.UserRepository;
-using InventoryMGMT_SYSTEM.NET.Enum.RegistrationEnum;
-using BCrypt.Net;
 
 namespace InventoryMGMT_SYSTEM.NET.Services.UserServices
 {
