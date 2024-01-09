@@ -23,6 +23,34 @@ namespace InventoryMGMT_SYSTEM.NET.Repository.UserRepository
         {
             return Task.FromResult(_dbContext.Users.Any(user => user.Username == username));
         }
+        public Task<bool> GetUserPassword(string username)
+        {
+            return Task.FromResult(_dbContext.Users.Any(user => user.Username == username));
+        }
+
+        public Task<string> GetPasswordByUsername(string username)
+        {
+            var user = _dbContext.Users.FirstOrDefault(u => u.Username == username);
+
+            if (user != null)
+            {
+                return Task.FromResult(user.Password);
+            }
+
+            return Task.FromResult<string>(null);
+        }
+        public Task<string> GetPasswordByEmail(string email)
+        {
+            var user = _dbContext.Users.FirstOrDefault(u => u.Email == email);
+
+            if (user != null)
+            {
+                return Task.FromResult(user.Password);
+            }
+
+            return Task.FromResult<string>(null);
+        }
+
 
         public async Task<User> CreateUser(User user)
         {

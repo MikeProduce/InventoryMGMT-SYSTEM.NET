@@ -1,6 +1,7 @@
 ﻿using InventoryMGMT_SYSTEM.NET.Models;
 using InventoryMGMT_SYSTEM.NET.DTOs;
 using InventoryMGMT_SYSTEM.NET.Repository.UserRepository;
+using InventoryMGMT_SYSTEM.NET.Utility.PasswordHasher;
 
 namespace InventoryMGMT_SYSTEM.NET.Services.UserServices
 {
@@ -25,8 +26,7 @@ namespace InventoryMGMT_SYSTEM.NET.Services.UserServices
                 throw new InvalidOperationException("This Email is already being used. Please choose a different one.");
             }
 
-            // Hash and salt the password using BCrypt
-            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(registerUserDTO.Password, BCrypt.Net.BCrypt.GenerateSalt(12));
+            string hashedPassword = PasswordHasher.HashPassword(registerUserDTO.Password);
 
             var newUser = new User
             {
@@ -38,6 +38,43 @@ namespace InventoryMGMT_SYSTEM.NET.Services.UserServices
 
             return await _userRepository.CreateUser(newUser);
 
+        }
+
+        public async Task<bool> AuthenticateUser(LoginUserDTO loginUserDTO)
+        {
+            string hashedPassword;
+
+            // Check if the provided credentials are valid
+            if (!string.IsNullOrEmpty(loginUserDTO.UserName))
+            {
+                // If username is provided, attempt to authenticate using username
+                hashedPassword = await _userRepository.GetPasswordByUsername(loginUserDTO.UserName);
+
+                if (ValidatePassword(loginUserDTO.Password, hashedPassword))
+                {
+                    return true;
+                }
+            }
+            else if (!string.IsNullOrEmpty(loginUserDTO.Email))
+            {
+                // If username is not provided but email is provided, attempt to authenticate using email
+                hashedPassword = await _userRepository.GetPasswordByEmail(loginUserDTO.Email);
+
+                if (ValidatePassword(loginUserDTO.Password, hashedPassword))
+                {
+                    return true;
+                }
+            }
+
+            // Invalid credentials
+            throw new InvalidOperationException("Invalid username or password.");
+        }
+
+
+        public bool ValidatePassword(string password, string hashedPassword)
+        {
+            // Use BCrypt to verify the password
+            return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
         }
 
 

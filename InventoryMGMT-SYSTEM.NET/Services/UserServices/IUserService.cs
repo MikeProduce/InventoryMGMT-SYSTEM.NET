@@ -7,6 +7,8 @@ namespace InventoryMGMT_SYSTEM.NET.Services.UserServices
     {
         Task<User> RegisterUser(RegisterUserDTO registerUserDTO);
         int UnregisterUser(int userId);
+        Task<bool> AuthenticateUser(LoginUserDTO loginUserDTO);
+
     }
 
 

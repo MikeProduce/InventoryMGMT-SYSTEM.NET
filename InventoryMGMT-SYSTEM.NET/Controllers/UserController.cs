@@ -30,6 +30,20 @@ namespace InventoryMGMT_SYSTEM.NET.Controllers.UserController
             }
         }
 
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginUserDTO loginUserDTO)
+        {
+            try
+            {
+                bool authenticateUser = await _userService.AuthenticateUser(loginUserDTO);
+                return Ok(authenticateUser);
+            }
+            catch (Exception ex)
+            {
+                return Unauthorized($"Authentication Failed: {ex.Message}");
+            }
+        }
+
         // Delete 
         [HttpDelete("unregister")]
         public IActionResult Unregister([FromBody] UnregisterUserDTO unregisterUserDTO)
