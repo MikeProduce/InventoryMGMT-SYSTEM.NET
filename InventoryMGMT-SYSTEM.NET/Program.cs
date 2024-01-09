@@ -15,19 +15,31 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<InventoryMGMTDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("InventoryMGMTConnectionString")));
-
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalHost5173", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+               .AllowAnyHeader()
+               .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseCors("AllowLocalHost5173");
 }
 
-app.UseHttpsRedirection();
+
+
+// app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
