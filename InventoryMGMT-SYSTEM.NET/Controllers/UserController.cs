@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using InventoryMGMT_SYSTEM.NET.DTOs;
 using InventoryMGMT_SYSTEM.NET.Services.UserServices;
-
+using Microsoft.AspNetCore.Authorization;
+using InventoryMGMT_SYSTEM.NET.Services.AuthServices;
 
 namespace InventoryMGMT_SYSTEM.NET.Controllers.UserController
 {
@@ -10,12 +11,13 @@ namespace InventoryMGMT_SYSTEM.NET.Controllers.UserController
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IAuthService _authService;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IAuthService authService)
         {
             _userService = userService;
-        }
-
+            _authService = authService;
+        } 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserDTO registerUserDTO)
         {
@@ -36,7 +38,21 @@ namespace InventoryMGMT_SYSTEM.NET.Controllers.UserController
             try
             {
                 bool authenticateUser = await _userService.AuthenticateUser(loginUserDTO);
-                return Ok(authenticateUser);
+                
+                if(authenticateUser)
+                {
+                    var userId = authenticateUser;
+
+                    var username = loginUserDTO.UserName;
+
+                    var token = _authService.GenerateJwtToken(username);
+
+                    return Ok(new {Token = token, UserId = userId, UserName = username});
+                }
+                else
+                {
+                    return Unauthorized("Authentication Failed: Invalid credentials");
+                }
             }
             catch (Exception ex)
             {
